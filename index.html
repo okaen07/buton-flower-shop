@@ -791,7 +791,7 @@
           <textarea id="fbMsg" placeholder="Повод, бюджет, дата — что угодно" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Написать в WhatsApp</button>
-        <p class="form-note">Можно и напрямую: <span id="fbAltPhone">+7 777 747 35 18</span> или <span id="fbAltEmail">yerlanorin@gmail.com</span>.</p>
+        <p class="form-note">Можно и напрямую: <span id="fbAltPhone"></span> или <span id="fbAltEmail"></span>.</p>
       </form>
       <ul class="info-list" id="contactInfo"></ul>
     </div>
@@ -814,8 +814,8 @@
     </div>
     <div class="foot-col">
       <h4>Контакты</h4>
-      <a href="#contact">+7 777 747 35 18</a>
-      <a href="#contact">yerlanorin@gmail.com</a>
+      <a href="#contact" id="footPhone"></a>
+      <a href="#contact" id="footEmail"></a>
       <a href="#contact">Уральск — доставка онлайн</a>
     </div>
     <div class="foot-col">
@@ -862,16 +862,24 @@
   "use strict";
 
   /* ================= CONFIG — замените демо-данные на реальные ================= */
+  // Телефон не хранится в открытом виде в исходнике (base64 — это не шифрование,
+  // просто чтобы номер не вытаскивали простые скрейперы прямо из кода на GitHub).
+  // Чтобы сменить номер: возьмите цифры с кодом страны без "+" и пробелов
+  // (напр. "77001234567") и закодируйте: btoa("77001234567") — результат сюда.
+  var _PHONE_DIGITS = atob("Nzc3Nzc0NzM1MTg=");
+  function formatPhone(d){
+    return "+7 " + d.slice(1,4) + " " + d.slice(4,7) + " " + d.slice(7,9) + " " + d.slice(9,11);
+  }
   var CONFIG = {
     shopName: "БУТОН",
     city: "Уральск",
-    phoneDisplay: "+7 777 747 35 18",
-    whatsappDigits: "77777473518",   // только цифры, с кодом страны, без плюса и пробелов
+    phoneDisplay: formatPhone(_PHONE_DIGITS),
+    whatsappDigits: _PHONE_DIGITS,   // только цифры, с кодом страны, без плюса и пробелов
     email: "yerlanorin@gmail.com",
     address: "Приём заказов онлайн — доставка по Уральску",
     hours: "Пн–Вс, 9:00–21:00",
     kaspiName: "БУТОН",
-    kaspiPhone: "+7 777 747 35 18",
+    kaspiPhone: formatPhone(_PHONE_DIGITS),
     currency: "₸"
   };
 
@@ -1227,6 +1235,8 @@
     document.getElementById("headPhone").href = "tel:" + CONFIG.whatsappDigits;
     document.getElementById("fbAltPhone").textContent = CONFIG.phoneDisplay;
     document.getElementById("fbAltEmail").textContent = CONFIG.email;
+    document.getElementById("footPhone").textContent = CONFIG.phoneDisplay;
+    document.getElementById("footEmail").textContent = CONFIG.email;
   }
 
   /* ================= cart drawer ================= */
